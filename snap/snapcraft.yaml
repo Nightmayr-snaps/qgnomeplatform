@@ -1,0 +1,65 @@
+name: qgnomeplatform
+base: core20
+version: '0.8.4'
+summary: QGnomePlatform
+description: |
+  QGnomePlatform is a Qt Platform Theme designed to use as many of the GNOME settings as possible in unmodified Qt applications. 
+  It allows Qt applications to fit into the environment as well as possible.
+grade: stable
+confinement: strict
+
+parts:
+  adwaita-qt:
+      source: https://github.com/FedoraQt/adwaita-qt.git
+      source-depth: 1
+      source-tag: 1.4.1
+      plugin: cmake
+      cmake-generator: Ninja
+      cmake-parameters: &cmake-params
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DCMAKE_FIND_ROOT_PATH=/snap/kde-frameworks-5-qt-5-15-3-core20-sdk/current
+      - -DQT_PLUGINS_DIR=/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins
+      build-snaps:
+      - kde-frameworks-5-qt-5-15-3-core20-sdk
+      - cmake
+      build-packages:
+      - libx11-xcb-dev
+      - libx11-dev
+      - libxcb1-dev
+      build-environment:
+      - LD_LIBRARY_PATH: $SNAPCRAFT_STAGE/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$LD_LIBRARY_PATH
+      - PATH: $SNAPCRAFT_STAGE/usr/bin:$PATH
+      override-build: |
+        snapcraftctl build
+        sed -i -E \
+          's|set\(_IMPORT_PREFIX "(.*)"\)|set\(_IMPORT_PREFIX "$SNAPCRAFT_STAGE\1"\)|' \
+          $SNAPCRAFT_PART_INSTALL/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/cmake/AdwaitaQt/AdwaitaQtTargets.cmake
+      prime:
+      - -usr/share/doc
+      - -usr/include
+      - -usr/lib/$SNAPCRAFT_ARCH_TRIPLET/cmake
+      - -usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig
+
+  qgnomeplatform:
+      after:
+      - adwaita-qt
+      source: https://github.com/FedoraQt/QGnomePlatform.git
+      source-depth: 1
+      source-tag: $SNAPCRAFT_PROJECT_VERSION
+      plugin: cmake
+      cmake-generator: Ninja
+      cmake-parameters: *cmake-params
+      build-snaps:
+      - kde-frameworks-5-qt-5-15-3-core20-sdk
+      - cmake
+      build-packages:
+      - libgtk-3-dev
+      - gsettings-desktop-schemas-dev
+      build-environment:
+      - LD_LIBRARY_PATH: $SNAPCRAFT_STAGE/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$LD_LIBRARY_PATH
+      - PATH: $SNAPCRAFT_STAGE/usr/bin:$PATH
+      prime:
+      - -usr/share/doc
+      - -usr/lib/$SNAPCRAFT_ARCH_TRIPLET/cmake
+      - -usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig
