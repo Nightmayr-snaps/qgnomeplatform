@@ -7,7 +7,7 @@ description: |
   It allows Qt applications to fit into the environment as well as possible.
 grade: stable
 slots:
-  nightmayr-qgnomeplatform-qt5-2204:
+  nightmayr-qgnomeplatform-qt5-2004:
     interface: content
     read:
       - /
