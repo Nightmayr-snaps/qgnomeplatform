@@ -1,4 +1,4 @@
-name: qgnomeplatform
+name: nightmayr-qgnomeplatform-qt5-2004
 base: core20
 version: '0.8.4'
 summary: QGnomePlatform
@@ -6,6 +6,11 @@ description: |
   QGnomePlatform is a Qt Platform Theme designed to use as many of the GNOME settings as possible in unmodified Qt applications. 
   It allows Qt applications to fit into the environment as well as possible.
 grade: stable
+slots:
+  nightmayr-qgnomeplatform-qt5-2204:
+    interface: content
+    read:
+      - /
 confinement: strict
 architectures:
   - build-on: amd64
@@ -13,7 +18,6 @@ architectures:
   - build-on: armhf
   - build-on: ppc64el
 compression: lzo
-
 parts:
   adwaita-qt:
       source: https://github.com/FedoraQt/adwaita-qt.git
@@ -24,10 +28,10 @@ parts:
       cmake-parameters: &cmake-params
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_INSTALL_PREFIX=/usr
-      - -DCMAKE_FIND_ROOT_PATH=/snap/kde-frameworks-5-qt-5-15-3-core20-sdk/current
+      - -DCMAKE_FIND_ROOT_PATH=/snap/nightmayr-qt-5-15-4-2004-sdk/current
       - -DQT_PLUGINS_DIR=/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins
       build-snaps:
-      - kde-frameworks-5-qt-5-15-3-core20-sdk
+      - nightmayr-qt-5-15-4-2004-sdk/latest/candidate
       - cmake
       build-packages:
       - libx11-xcb-dev
@@ -56,9 +60,6 @@ parts:
       plugin: cmake
       cmake-generator: Ninja
       cmake-parameters: *cmake-params
-      build-snaps:
-      - kde-frameworks-5-qt-5-15-3-core20-sdk
-      - cmake
       build-packages:
       - libgtk-3-dev
       - gsettings-desktop-schemas-dev
@@ -69,3 +70,15 @@ parts:
       - -usr/share/doc
       - -usr/lib/$SNAPCRAFT_ARCH_TRIPLET/cmake
       - -usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig
+  
+  # cleanup:
+  #   after:
+  #   - qgnomeplatform
+  #   plugin: nil
+  #   build-snaps:
+  #   - core20
+  #   override-prime: |
+  #     set -eux
+  #     for snap in "core20" "nightmayr-qt-5-15-4-2004-sdk"; do
+  #       cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
+  #     done
