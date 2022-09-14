@@ -1,5 +1,5 @@
-name: nightmayr-qgnomeplatform-qt5-2004
-base: core20
+name: nightmayr-qgnomeplatform-qt5-2204
+base: core22
 version: '0.8.4'
 summary: QGnomePlatform
 description: |
@@ -7,7 +7,7 @@ description: |
   It allows Qt applications to fit into the environment as well as possible.
 grade: stable
 slots:
-  nightmayr-qgnomeplatform-qt5-2004:
+  nightmayr-qgnomeplatform-qt5-2204:
     interface: content
     read:
       - /
@@ -28,10 +28,10 @@ parts:
       cmake-parameters: &cmake-params
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_INSTALL_PREFIX=/usr
-      - -DCMAKE_FIND_ROOT_PATH=/snap/nightmayr-qt-5-15-4-2004-sdk/current
+      - -DCMAKE_FIND_ROOT_PATH=/snap/nightmayr-qt-5-15-6-2204-sdk/current
       - -DQT_PLUGINS_DIR=/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins
       build-snaps:
-      - nightmayr-qt-5-15-4-2004-sdk/latest/candidate
+      - nightmayr-qt-5-15-6-2204-sdk/latest/candidate
       - cmake
       build-packages:
       - libx11-xcb-dev
