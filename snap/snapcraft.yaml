@@ -29,7 +29,7 @@ parts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_INSTALL_PREFIX=/usr
       - -DCMAKE_FIND_ROOT_PATH=/snap/nightmayr-qt-5-15-6-2204-sdk/current
-      - -DQT_PLUGINS_DIR=/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins
+      - -DQT_PLUGINS_DIR=/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/plugins
       build-snaps:
       - nightmayr-qt-5-15-6-2204-sdk/latest/candidate
       - cmake
@@ -38,18 +38,18 @@ parts:
       - libx11-dev
       - libxcb1-dev
       build-environment:
-      - LD_LIBRARY_PATH: $SNAPCRAFT_STAGE/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$LD_LIBRARY_PATH
-      - PATH: $SNAPCRAFT_STAGE/usr/bin:$PATH
+      - LD_LIBRARY_PATH: $CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET${LD_LIBRARY_PATH:+:LD_LIBRARY_PATH}
+      - PATH: $CRAFT_STAGE/usr/bin:$PATH
       override-build: |
-        snapcraftctl build
+        craftctl default
         sed -i -E \
-          's|set\(_IMPORT_PREFIX "(.*)"\)|set\(_IMPORT_PREFIX "$SNAPCRAFT_STAGE\1"\)|' \
-          $SNAPCRAFT_PART_INSTALL/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/cmake/AdwaitaQt/AdwaitaQtTargets.cmake
+          's|set\(_IMPORT_PREFIX "(.*)"\)|set\(_IMPORT_PREFIX "$CRAFT_STAGE\1"\)|' \
+          $CRAFT_PART_INSTALL/usr/lib/$CRAFT_ARCH_TRIPLET/cmake/AdwaitaQt/AdwaitaQtTargets.cmake
       prime:
       - -usr/share/doc
       - -usr/include
-      - -usr/lib/$SNAPCRAFT_ARCH_TRIPLET/cmake
-      - -usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig
+      - -usr/lib/$CRAFT_ARCH_TRIPLET/cmake
+      - -usr/lib/$CRAFT_ARCH_TRIPLET/pkgconfig
 
   qgnomeplatform:
       after:
@@ -64,12 +64,12 @@ parts:
       - libgtk-3-dev
       - gsettings-desktop-schemas-dev
       build-environment:
-      - LD_LIBRARY_PATH: $SNAPCRAFT_STAGE/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$LD_LIBRARY_PATH
-      - PATH: $SNAPCRAFT_STAGE/usr/bin:$PATH
+      - LD_LIBRARY_PATH: $CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET${LD_LIBRARY_PATH:+:LD_LIBRARY_PATH}
+      - PATH: $CRAFT_STAGE/usr/bin:$PATH
       prime:
       - -usr/share/doc
-      - -usr/lib/$SNAPCRAFT_ARCH_TRIPLET/cmake
-      - -usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig
+      - -usr/lib/$CRAFT_ARCH_TRIPLET/cmake
+      - -usr/lib/$CRAFT_ARCH_TRIPLET/pkgconfig
   
   # cleanup:
   #   after:
@@ -80,5 +80,5 @@ parts:
   #   override-prime: |
   #     set -eux
   #     for snap in "core20" "nightmayr-qt-5-15-4-2004-sdk"; do
-  #       cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
+  #       cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$CRAFT_PRIME/{}" \;
   #     done
